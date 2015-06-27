@@ -12,4 +12,5 @@ before_script:
 script: 'curl -s https://raw.githubusercontent.com/atom/ci/master/build-package.sh | sh'
 
 after_success:
+  - cat coverage/lcov.info
   - node node_modules/coveralls/bin/coveralls.js < coverage/lcov.info
