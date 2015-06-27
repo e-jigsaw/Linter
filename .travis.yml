@@ -7,7 +7,7 @@ notifications:
 
 before_script:
   - npm install
-  - ./node_module/ibrik/bin/ibrik cover lib/**/*.coffee
+  - ./node_modules/ibrik/bin/ibrik cover lib/**/*.coffee
 
 script: 'curl -s https://raw.githubusercontent.com/atom/ci/master/build-package.sh | sh'
 
