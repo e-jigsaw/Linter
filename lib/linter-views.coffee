@@ -79,9 +79,9 @@ class LinterViews
     counts = {project: 0, file: 0}
     @messages.clear()
     @linter.eachEditorLinter (editorLinter) =>
-      @extractMessages(editorLinter.getMessages(), counts)
+      counts = @extractCounts(editorLinter.getMessages(), counts)
 
-    @extractMessages(@linter.getProjectMessages(), counts)
+    counts = @extractCounts(@linter.getProjectMessages(), counts)
 
     @updateLineMessages()
     @updateBubble()
@@ -220,23 +220,21 @@ class LinterViews
     @markers = []
 
   # This method is called in render, and classifies the messages according to scope
-  extractMessages: (Gen, counts) ->
+  extractCounts: (@messages, counts) ->
     isProject = @scope is 'Project'
     activeEditor = atom.workspace.getActiveTextEditor()
     activeFile = activeEditor?.getPath()
-    Gen.forEach (Entry) =>
-      # Entry === Array<Messages>
-      Entry.forEach (message) =>
-        # If there's no file prop on message and the panel scope is file then count is as current
-        if activeEditor and ((not message.filePath and not isProject) or message.filePath is activeFile)
-          counts.file++
-          counts.project++
-          message.currentFile = true
-        else
-          counts.project++
-          message.currentFile = false
-        @messages.add message
+    messages.forEach (message) =>
+      # If there's no file prop on message and the panel scope is file then count is as current
+      if activeEditor and ((not message.filePath and not isProject) or message.filePath is activeFile)
+        counts.file++
+        counts.project++
+        message.currentFile = true
+      else
+        counts.project++
+        message.currentFile = false
 
+    return counts
   # this method is called on package deactivate
   destroy: ->
     @messages.clear()

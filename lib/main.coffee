@@ -69,7 +69,9 @@ module.exports =
     @instance.views.attachBottom(statusBar)
 
   provideLinter: ->
-    @instance
+    LinterService = require('./linter-service.coffee')
+
+    return new LinterService(@instance)
 
   deactivate: ->
     @instance?.deactivate()

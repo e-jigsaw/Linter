@@ -1,5 +1,5 @@
 Path = require 'path'
-{CompositeDisposable, Emitter} = require 'atom'
+{Dispoable, CompositeDisposable, Emitter} = require 'atom'
 LinterViews = require './linter-views'
 EditorLinter = require './editor-linter'
 Helpers = require './helpers'
@@ -18,7 +18,10 @@ class Linter
     @editorLinters = new Map
     @messagesProject = new Map # Values set in editor-linter and consumed in views.render
     @linters = new Set # Values are pushed here from Main::consumeLinter
+    @setupSubscriptions()
 
+  # This function is overridden in the tests to create a more controlled class.
+  setupSubscriptions: ->
     @subscriptions.add atom.config.observe 'linter.showErrorInline', (showBubble) =>
       @views.setShowBubble(showBubble)
     @subscriptions.add atom.config.observe 'linter.showErrorPanel', (showPanel) =>
@@ -75,18 +78,33 @@ class Linter
   getLinters: ->
     @linters
 
-  onDidChangeProjectMessages: (callback)->
-    @emitter.on 'did-change-project-messages', callback
+  # @subscriptions.add returns null, so I created this for a simple passthrough
+  subAdd: (disposable) ->
+    @subscriptions.add(disposable)
+    return disposable
 
+  onDidChangeProjectMessages: (callback) ->
+    return @subAdd(@emitter.on('did-change-project-messages', callback))
+
+  # this method is mis-named. It doesn't return messages, it returns a map of
+  # linters.
   getProjectMessages: ->
-    @messagesProject
+    messages = new Set
+    @messagesProject.forEach (entry) ->
+      entry.forEach (message) ->
+        messages.add(message)
+    return messages
 
   setProjectMessages: (linter, messages) ->
+    unless @hasLinter(linter)
+      throw new Error('Unknown linter')
     @messagesProject.set(linter, Helpers.validateResults(messages))
     @emitter.emit 'did-change-project-messages', @messagesProject
     @views.render()
 
   deleteProjectMessages: (linter) ->
+    unless @hasLinter(linter)
+      throw new Error('Unknown linter')
     @messagesProject.delete(linter)
     @emitter.emit 'did-change-project-messages', @messagesProject
     @views.render()
@@ -102,7 +120,7 @@ class Linter
 
   observeEditorLinters: (callback) ->
     @eachEditorLinter callback
-    @emitter.on 'observe-editor-linters', callback
+    return @subAdd(@emitter.on('observe-editor-linters', callback))
 
   deactivate: ->
     @subscriptions.dispose()
