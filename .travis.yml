@@ -5,10 +5,13 @@ notifications:
     on_success: never
     on_failure: change
 
-before_script: 'npm install'
+before_script:
+  - npm install
+  - ./node_modules/ibrik/bin/ibrik cover lib/**/*.coffee
 
-script: './node_modules/ibrik/bin/ibrik cover lib/**/*.coffee curl -s https://raw.githubusercontent.com/atom/ci/master/build-package.sh | sh'
+script: 'curl -s https://raw.githubusercontent.com/atom/ci/master/build-package.sh | sh'
 
 after_success:
+  - ./node_modules/ibrik/bin/ibrik report lib/**/*.coffee
   - cat coverage/lcov.info
   - node node_modules/coveralls/bin/coveralls.js < coverage/lcov.info
