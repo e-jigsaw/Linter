@@ -38,6 +38,11 @@ module.exports =
       enum: ['Left', 'Right']
       type: 'string'
       default: 'Left'
+    statusIconScope:
+      title: 'Message scope of Status Icon on Bottom Bar'
+      enum: ['Line', 'File', 'Project']
+      type: 'string',
+      default: 'Project'
     ignoredMessageTypes:
       title: "Ignored message Types"
       type: 'array'
