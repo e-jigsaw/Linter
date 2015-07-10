@@ -119,7 +119,7 @@ class LinterViews
   attachBottom: (statusBar) ->
     @bottomBar = statusBar.addLeftTile
       item: @bottomContainer,
-      priority: -100
+      priority: 10
 
   removeMarkers: ->
     @markers.forEach (marker) -> try marker.destroy()
