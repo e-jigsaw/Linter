@@ -112,15 +112,9 @@ class LinterViews
       ) if @underlineIssues
 
   attachBottom: (statusBar) ->
-    @subscriptions.add atom.config.observe('linter.statusIconPosition', (statusIconPosition) =>
-      @bottomBar?.destroy()
-      @bottomBar = statusBar["add#{statusIconPosition}Tile"]
-        item: @bottomContainer,
-        priority: if statusIconPosition == 'Left' then -100 else 100
-    )
-    @subscriptions.add atom.config.observe('linter.displayLinterInfo', (displayLinterInfo) =>
-      @bottomContainer.setVisibility(displayLinterInfo)
-    )
+    @bottomBar = statusBar.addLeftTile
+      item: @bottomContainer,
+      priority: 10
 
   removeMarkers: (messages = @messages) ->
     messages.forEach((message) =>
