@@ -3,18 +3,28 @@ module.exports =
   instance: null
   config:
     lintOnFly:
-      title: 'Lint on fly'
       description: 'Lint files while typing, without the need to save them'
       type: 'boolean'
       default: true
       order: 1
+    lintOnFlyInterval:
+      description: 'Interval at which providers are triggered on the fly'
+      type: 'integer'
+      default: 300
+      order: 1
 
     ignoredMessageTypes:
-      title: 'Ignored message Types'
+      description: 'Comma separated list of message types to completely ignore'
       type: 'array'
       default: []
       items:
         type: 'string'
+      order: 2
+    ignoreVCSIgnoredFiles:
+      title: 'Ignore VCS Ignored Files'
+      description: 'Do not lint files ignored by VCS'
+      type: 'boolean'
+      default: true
       order: 2
 
     showErrorInline:
@@ -22,6 +32,12 @@ module.exports =
       description: 'Show inline tooltips for errors'
       type: 'boolean'
       default: true
+      order: 3
+    inlineTooltipInterval:
+      title: 'Inline tooltip interval'
+      description: 'Interval at which inline tooltip is updated (in ms)'
+      type: 'integer'
+      default: 60
       order: 3
     gutterEnabled:
       title: 'Highlight error lines in gutter'
