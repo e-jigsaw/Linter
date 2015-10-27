@@ -1,5 +1,10 @@
 ## 1.9.1
 
+* Add `ignoreMatchedFiles` config
+* Fix an issue where the `linter.displayLinterInfo` preference was not respected
+
+## 1.9.0
+
 * Fix compatibility with upcoming version of atom
 * Support for buffer modifying linters has been removed (We don't think anybody was using them anyway)
 * Add a new `inlineTooltipInterval` config
