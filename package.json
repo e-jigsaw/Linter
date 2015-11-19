@@ -2,7 +2,7 @@
   "name": "linter",
   "main": "./lib/main",
   "author": "atom-community",
-  "version": "1.10.0",
+  "version": "1.11.2",
   "description": "A Base Linter with Cow Powers",
   "repository": "https://github.com/atom-community/linter",
   "license": "MIT",
@@ -25,6 +25,11 @@
     }
   },
   "providedServices": {
+    "linter-indie": {
+      "versions": {
+        "1.0.0": "provideIndie"
+      }
+    },
     "linter-plus-self": {
       "versions": {
         "0.1.0": "provideLinter"
